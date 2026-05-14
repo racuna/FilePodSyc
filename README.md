@@ -13,6 +13,8 @@ Existing podcast sync relies on **gPodder.net**, **Nextcloud-gPodder**, or **oPo
 
 **No API. No OAuth. No server maintenance. Just files.**
 
+You can try it with [LiTePop](https://github.com/racuna/litepop)!
+
 ---
 
 ## What Changed in v1.3
