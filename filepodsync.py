@@ -568,18 +568,28 @@ class FilePodSync:
         self._synced_state[fname] = wrapped
 
     def _detect_clock_skew(self, remote_state: Dict) -> None:
-        """Warn if any remote file timestamp is far from local UTC."""
-        local_now  = get_utc_ms()
-        max_remote = max(
+        """Warn if local and remote active timestamps differ significantly."""
+        local_max = max(
+            (self._synced_state.get(f, {}).get("updated_at", 0)
+             for f in ("feeds", "episodes", "devices", "queue")),
+            default=0,
+        )
+        remote_max = max(
             (remote_state.get(f, {}).get("updated_at", 0)
              for f in ("feeds", "episodes", "devices", "queue")),
             default=0,
         )
-        if max_remote and abs(local_now - max_remote) > SKEW_WARNING_MS:
+        # Solo advertir si ambos lados tienen actividad reciente (últimas 24h)
+        # y sus timestamps máximos difieren significativamente.
+        now = get_utc_ms()
+        day_ms = 86_400_000
+        if (local_max > now - day_ms and remote_max > now - day_ms and
+                local_max and remote_max and
+                abs(local_max - remote_max) > SKEW_WARNING_MS):
             logger.warning(
-                "Clock skew detected: local=%d remote_max=%d diff=%dms — "
+                "Clock skew detected: local_max=%d remote_max=%d diff=%dms — "
                 "LWW results may be incorrect during skew window",
-                local_now, max_remote, abs(local_now - max_remote),
+                local_max, remote_max, abs(local_max - remote_max),
             )
 
     # ─────────────────────────────────────────────────────────────────────────
