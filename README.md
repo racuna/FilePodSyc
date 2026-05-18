@@ -7,6 +7,21 @@
 
 ---
 
+## Interoperability Status
+
+Current tested environments:
+
+- LitePop ↔ LitePop
+- Linux ↔ WSL2
+- Syncthing transport
+- Concurrent playback updates
+- Queue synchronization
+- Subscription synchronization
+
+Status: Experimental but functional
+
+---
+
 ## Why FilePodSync?
 
 Existing podcast sync relies on **gPodder.net**, **Nextcloud-gPodder**, or **oPodSync** — all server-dependent, fragile, or requiring technical expertise to self-host. FilePodSync replaces the server with a **folder** synced by Dropbox, Syncthing, Google Drive, Filen, iCloud, or your NAS.
